@@ -36,7 +36,7 @@ Route::group(['prefix' => 'account'], function () {
     Route::get('/profile', [AccountController::class, 'profile'])->name('account.profile');
     Route::put('/update-profile', [AccountController::class, 'updateProfile'])->name('account.updateProfile');
     Route::post('/update-profile-pic', [AccountController::class, 'updateProfilePic'])->name('account.updateProfilePic');
-
     Route::get('/logout', [AccountController::class, 'logout'])->name('account.logout');
+    Route::get('/create-job', [AccountController::class, 'createJob'])->name('account.createJob');
   });
 });
