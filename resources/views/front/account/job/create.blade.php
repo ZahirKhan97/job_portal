@@ -26,6 +26,7 @@
                             <div class="col-md-6 mb-4">
                                 <label for="" class="mb-2">Title<span class="req">*</span></label>
                                 <input type="text" placeholder="Job Title" id="title" name="title" class="form-control">
+                                <p></p>
                             </div>
                             <div class="col-md-6  mb-4">
                                 <label for="" class="mb-2">Category<span class="req">*</span></label>
@@ -37,13 +38,14 @@
                                     @endforeach
                                     @endif
                                 </select>
+                                <p></p>
                             </div>
                         </div>
                         
                         <div class="row">
                             <div class="col-md-6 mb-4">
                                 <label for="" class="mb-2">Job Type<span class="req">*</span></label>
-                                <select class="form-select">
+                                <select name="jobType" id="jobType" class="form-select">
                                     <option value="">Select Job Type</option>
                                     @if($jobTypes->isNotEmpty())
                                         @foreach($jobTypes as $jobType)
@@ -51,10 +53,12 @@
                                         @endforeach
                                     @endif
                                 </select>
+                                <p></p>
                             </div>
                             <div class="col-md-6  mb-4">
                                 <label for="" class="mb-2">Vacancy<span class="req">*</span></label>
                                 <input type="number" min="1" placeholder="Vacancy" id="vacancy" name="vacancy" class="form-control">
+                                <p></p>
                             </div>
                         </div>
 
@@ -66,13 +70,15 @@
 
                             <div class="mb-4 col-md-6">
                                 <label for="" class="mb-2">Location<span class="req">*</span></label>
-                                <input type="text" placeholder="location" id="location" name="Location" class="form-control">
+                                <input type="text" placeholder="location" id="location" name="location" class="form-control">
+                                <p></p>
                             </div>
                         </div>
 
                         <div class="mb-4">
                             <label for="" class="mb-2">Description<span class="req">*</span></label>
                             <textarea class="form-control" name="description" id="description" cols="5" rows="5" placeholder="Description"></textarea>
+                            <p></p>
                         </div>
                         <div class="mb-4">
                             <label for="" class="mb-2">Benefits</label>
@@ -87,10 +93,27 @@
                             <textarea class="form-control" name="qualifications" id="qualifications" cols="5" rows="5" placeholder="Qualifications"></textarea>
                         </div>
                         
-                        
+                        <div class="mb-4">
+                            <label for="" class="mb-2">Experience<span class="req">*</span></label>
+                            <select name="experience" id="experience" class="form-control">
+                                <option value="">Select Experience</option>
+                                <option value="1">1 Year</option>
+                                <option value="2">2 Years</option>
+                                <option value="3">3 Years</option>
+                                <option value="4">4 Years</option>
+                                <option value="5">5 Years</option>
+                                <option value="6">6 Years</option>
+                                <option value="7">7 Years</option>
+                                <option value="8">8 Years</option>
+                                <option value="9">9 Years</option>
+                                <option value="10">10 Years</option>
+                                <option value="10_plus">10+ Years</option>
+                            </select>
+                            <p></p>
+                        </div>
 
                         <div class="mb-4">
-                            <label for="" class="mb-2">Keywords<span class="req">*</span></label>
+                            <label for="" class="mb-2">Keywords</label>
                             <input type="text" placeholder="keywords" id="keywords" name="keywords" class="form-control">
                         </div>
 
@@ -100,11 +123,12 @@
                             <div class="mb-4 col-md-6">
                                 <label for="" class="mb-2">Name<span class="req">*</span></label>
                                 <input type="text" placeholder="Company Name" id="company_name" name="company_name" class="form-control">
+                                <p></p>
                             </div>
 
                             <div class="mb-4 col-md-6">
                                 <label for="" class="mb-2">Location</label>
-                                <input type="text" placeholder="Location" id="location" name="location" class="form-control">
+                                <input type="text" placeholder="Location" id="company_location" name="company_location" class="form-control">
                             </div>
                         </div>
 
@@ -114,7 +138,7 @@
                         </div>
                     </div> 
                     <div class="card-footer  p-4">
-                        <button type="button" class="btn btn-primary">Save Job</button>
+                        <button type="submit" class="btn btn-primary">Save Job</button>
                     </div>
                 </div> 
             </form>
@@ -126,36 +150,82 @@
 
 @section('customJs')
   <script>
-    $("#userForm").submit(function(e){
+    $("#createJobForm").submit(function(e){
       e.preventDefault();
       $.ajax({
-        url: '{{ route("account.updateProfile") }}',
-        type: 'put',
-        data: $("#userForm").serializeArray(),
+        url: '{{ route("account.saveJob") }}',
+        type: 'post',
+        data: $("#createJobForm").serializeArray(),
         dataType: 'json',
         success: function(response){
           if(response.status == true) 
           {
-            $('#name').removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html("");
-            $('#email').removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html("");
-            window.location.href="{{ route('account.profile') }}"
+            $('#title').removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html("");
+            $('#category').removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html("");
+            $('#jobType').removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html("");
+            $('#vacancy').removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html("");
+            $('#location').removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html("");
+            $('#description').removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html("");
+            $('#experience').removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html("");
+            $('#company_name').removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html("");
+            window.location.href='{{ route("account.myJobs") }}';
           } 
           else 
           {
             var errors = response.errors;
-            if(errors.name) {
-                    $('#name').addClass('is-invalid').siblings('p').addClass('invalid-feedback').html(errors.name);
+            if(errors.title) {
+                    $('#title').addClass('is-invalid').siblings('p').addClass('invalid-feedback').html(errors.title);
                 }
                 else {
-                    $('#name').removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html("");
+                    $('#title').removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html("");
                 }
-                if(errors.email) {
-                    $('#email').addClass('is-invalid').siblings('p').addClass('invalid-feedback').html(errors.email);
+                if(errors.category) {
+                    $('#category').addClass('is-invalid').siblings('p').addClass('invalid-feedback').html(errors.category);
                 }
                 else {
-                    $('#email').removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html("");
+                    $('#category').removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html("");
+                }
+                if(errors.jobType) {
+                    $('#jobType').addClass('is-invalid').siblings('p').addClass('invalid-feedback').html(errors.jobType);
+                }
+                else {
+                    $('#jobType').removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html("");
+                }
+                if(errors.vacancy) {
+                    $('#vacancy').addClass('is-invalid').siblings('p').addClass('invalid-feedback').html(errors.vacancy);
+                }
+                else {
+                    $('#vacancy').removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html("");
+                }
+                if(errors.location) {
+                    $('#location').addClass('is-invalid').siblings('p').addClass('invalid-feedback').html(errors.location);
+                }
+                else {
+                    $('#location').removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html("");
+                }
+                if(errors.experience) {
+                    $('#experience').addClass('is-invalid').siblings('p').addClass('invalid-feedback').html(errors.experience);
+                }
+                else {
+                    $('#experience').removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html("");
+                }
+                if(errors.description) {
+                    $('#description').addClass('is-invalid').siblings('p').addClass('invalid-feedback').html(errors.description);
+                }
+                else {
+                    $('#description').removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html("");
+                }
+                if(errors.company_name) {
+                    $('#company_name').addClass('is-invalid').siblings('p').addClass('invalid-feedback').html(errors.company_name);
+                }
+                else {
+                    $('#company_name').removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html("");
                 }
           }
+        },
+        error: function(xhr, status, error) {
+            console.error("AJAX error:", status, error);
+            alert("An error occurred while submitting the form. Please try again.");
         }
       });
     });

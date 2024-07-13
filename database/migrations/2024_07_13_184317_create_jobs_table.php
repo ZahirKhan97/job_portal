@@ -28,6 +28,8 @@ return new class extends Migration
             $table->string('company_name');
             $table->string('comapny_location')->nullable();
             $table->string('comapny_website')->nullable();
+            $table->integer('status')->default(1);
+            $table->integer('isFeatured')->default(0);
             $table->timestamps();
         });
     }
