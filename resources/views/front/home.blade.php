@@ -71,9 +71,9 @@
                   <div class="row">
                     @if($featuredJobs->isNotEmpty())
                         @foreach($featuredJobs as $featuredJob)
-                        <div class="col-md-4">
-                            <div class="card border-0 p-3 shadow mb-4">
-                                <div class="card-body">
+                        <div class="col-md-4 mb-4">
+                            <div class="card border-0 p-3 shadow mb-4 h-100 d-flex flex-column">
+                                <div class="card-body flex-grow-1 d-flex flex-column justify-content-between">
                                     <h3 class="border-0 fs-5 pb-2 mb-0">{{ $featuredJob->title }}</h3>
                                     <p>{{ Str::words($featuredJob->description, 5) }}</p>
                                     <div class="bg-light p-3 border">
