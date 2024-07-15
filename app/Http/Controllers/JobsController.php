@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Job;
+use App\Models\JobApplication;
 use App\Models\JobType;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class JobsController extends Controller
 {
@@ -69,5 +71,63 @@ class JobsController extends Controller
             abort(404);
         }
         return view('front.jobDetail', ['job' => $job]);
+    }
+
+    public function applyJob(Request $request)
+    {
+        $id = $request->id;
+        $job = Job::where('id', $id)->first();
+
+        // if job not found in db
+        if ($job == null) {
+            $message = 'Job does not exist';
+            session()->flash('error', $message);
+            return response()->json([
+                'status' => false,
+                'message' => $message
+            ]);
+        }
+
+        // you cannot apply on your own job
+
+        $employer_id = $job->user_id;
+        if ($employer_id == Auth::user()->id) {
+            $message = 'You cannot apply on your own job';
+            session()->flash('error', $message);
+            return response()->json([
+                'status' => false,
+                'message' => $message
+            ]);
+        }
+
+        // You cannot apply on ajob twice
+
+        $jobApplicationCount = JobApplication::where([
+            'user_id' => Auth::user()->id,
+            'job_id' => $id
+        ])->count();
+
+        if ($jobApplicationCount > 0) {
+            $message = 'You already applied on this job';
+            session()->flash('error', $message);
+            return response()->json([
+                'status' => false,
+                'message' => $message
+            ]);
+        }
+
+        $application = new JobApplication();
+        $application->job_id = $id;
+        $application->user_id = Auth::user()->id;
+        $application->employer_id = $employer_id;
+        $application->applied_date = now();
+        $application->save();
+
+        $message = 'You have successfully applied';
+        session()->flash('success', $message);
+        return response()->json([
+            'status' => true,
+            'message' => $message
+        ]);
     }
 }
