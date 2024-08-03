@@ -69,7 +69,7 @@
                       <div class="pt-3 text-end">
                           <a href="#" class="btn btn-secondary">Save</a>
                           @if(Auth::check())
-                            <a href="#" onclick="applyJob({{ $job->id }})" class="btn btn-primary">Apply</a>
+                            <a javascript:void(0); onclick="applyJob({{ $job->id }})" class="btn btn-primary">Apply</a>
                           @else
                             <a href="javascript:void(0);" class="btn btn-primary disabled">Login to Apply</a>
                           @endif
